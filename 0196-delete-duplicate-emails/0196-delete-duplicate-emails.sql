@@ -1,0 +1,34 @@
+# Write your MySQL query statement below
+
+WITH BASE AS( 
+SELECT EMAIL, COUNT(DISTINCT ID) AS 'IDCOUNT'
+FROM PERSON
+GROUP BY EMAIL
+HAVING COUNT(DISTINCT ID) > 1
+),
+SECONDBASE AS (
+SELECT A.*, 'Duplicate' as Dup
+from  Person a
+join BASE b
+on a.email = b.email
+),
+MINIMUMTABLES AS (select EMAIL, min(ID) as 'MinimumID'
+from SECONDBASE
+group by EMAIL
+)
+
+,FINAL AS (
+SELECT A.*, B.MinimumID
+FROM SECONDBASE A
+LEFT JOIN MINIMUMTABLES B
+ON A.EMAIL = B.EMAIL
+AND A.id = B.MinimumID
+)
+
+DELETE 
+FROM PERSON
+WHERE ID IN (
+SELECT ID
+FROM FINAL
+WHERE MinimumID IS NULL
+)
