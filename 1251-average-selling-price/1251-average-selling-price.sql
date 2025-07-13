@@ -31,4 +31,6 @@ Approach
 2. Calculated the total amount for each record using (units * price) columns
 3. Grouped the rows based on the price id column to get sum of units and sum of total
 4. In final part, calculated the average using total price and total sum columns and using the rounding function.
+
+5. Need to join to the prices table because there might be a case where no units are sold yet we need to show the product ids. For example product id 1 having no units sold. So, record should show 1 and 0
 */
